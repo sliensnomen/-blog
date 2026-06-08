@@ -11,34 +11,30 @@ import ClickEffect from "../components/ClickEffect";
 import BackgroundSlider from "../components/BackgroundSlider";
 import GlobalToolbox from "../components/GlobalToolbox";
 import SplashScreen from "../components/SplashScreen";
+import { OperationProvider } from "../context/OperationContext";
+import { ToastProvider } from '../components/ToastProvider';
 import CyberCat from '../components/CyberCat';
 import DanmakuBackground from '../components/DanmakuBackground';
+import GlobalSnow from '../components/GlobalSnow';
 
-import MobileBackButton from '../components/MobileBackButton';
+// 🌟 1. 引入 Next.js 官方脚本组件
+import Script from 'next/script';
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
-
-const notoSerif = Noto_Serif_SC({
-  subsets: ["latin"],
-  weight: ["400", "700", "900"],
-  variable: "--font-serif",
-  display: 'swap',
-});
+const notoSerif = Noto_Serif_SC({ subsets: ["latin"], weight: ["400", "700", "900"], variable: "--font-serif", display: 'swap' });
 
 export const metadata: Metadata = {
   title: siteConfig.title,
   description: siteConfig.bio,
-  icons: {
-    icon: siteConfig.faviconUrl,
-    apple: siteConfig.faviconUrl,
-  },
+  icons: { icon: siteConfig.faviconUrl, apple: siteConfig.faviconUrl },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="zh-CN" className={`${geistSans.variable} ${geistMono.variable} ${notoSerif.variable} h-full antialiased`} suppressHydrationWarning>
       <head>
+        {/* 🌟 2. 这里的 CSS 逻辑保持原样，因为 style 标签在 React 中是受支持的 */}
         <style
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
@@ -48,91 +44,81 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             `
           }}
         />
-        <script
-          suppressHydrationWarning
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                if (sessionStorage.getItem('hasSeenSplash') === 'true') {
-                  document.documentElement.classList.add('splash-seen');
-                }
-              } catch (e) {}
-            `
-          }}
-        />
+
+        {/* 🌟 3. 核心修复：使用 <Script> 组件替代原生 <script> */}
+        {/* strategy="beforeInteractive" 确保脚本在页面交互前执行，防止闪屏 */}
+        <Script id="handle-splash-logic" strategy="beforeInteractive">
+          {`
+            try {
+              if (sessionStorage.getItem('hasSeenSplash') === 'true') {
+                document.documentElement.classList.add('splash-seen');
+              }
+            } catch (e) {}
+          `}
+        </Script>
       </head>
 
       <body className="w-screen overflow-x-hidden min-h-full flex flex-col relative transition-colors duration-1000 bg-slate-50 dark:bg-slate-950 font-serif">
         <ThemeProvider>
+          <OperationProvider>
+            <ToastProvider>
+              <SplashScreen />
+              <MusicProvider>
+                <div id="app-mount-root" className="flex-1 flex flex-col transition-opacity duration-1000">
+                  <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
+                    {!siteConfig.useGradient && <BackgroundSlider />}
+                    <div className="absolute inset-0 z-[-9] bg-white/30 dark:bg-slate-900/40 backdrop-blur-md transition-colors duration-1000"></div>
+                    <div
+                      className="absolute inset-0 z-[-8] opacity-60 dark:opacity-20 mix-blend-color transition-opacity duration-1000 transform-gpu"
+                      style={{
+                        background: `linear-gradient(-45deg, ${siteConfig.themeColors.join(', ')})`,
+                        backgroundSize: '400% 400%',
+                        animation: 'gradientMove 15s ease infinite'
+                      }}
+                    ></div>
+                    <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-white/40 dark:bg-indigo-900/20 blur-[100px] rounded-full mix-blend-overlay z-[-7]"></div>
+                    <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-400/30 dark:bg-purple-900/30 blur-[100px] rounded-full mix-blend-overlay z-[-7]"></div>
 
-          <SplashScreen />
+                    <div className="bg-effects-wrapper transition-opacity duration-1000">
+                      <BackgroundEffects />
+                    </div>
+                  </div>
 
-          <MusicProvider>
-            <div id="app-mount-root" className="flex-1 flex flex-col transition-opacity duration-1000">
-              <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
-                {!siteConfig.useGradient && <BackgroundSlider />}
-                <div className="absolute inset-0 z-[-9] bg-white/30 dark:bg-slate-900/40 backdrop-blur-md transition-colors duration-1000"></div>
+                  <DanmakuBackground />
+                  <GlobalSnow />
 
-                <div
-                  className="absolute inset-0 z-[-8] opacity-60 dark:opacity-20 mix-blend-color transition-opacity duration-1000 transform-gpu"
-                  style={{
-                    background: `linear-gradient(-45deg, ${siteConfig.themeColors.join(', ')})`,
-                    backgroundSize: '400% 400%',
-                    animation: 'gradientMove 15s ease infinite' // 🌟 全端保留渐变流动
-                  }}
-                ></div>
+                  <div className="relative z-10 flex-1 flex flex-col">
+                    {children}
+                  </div>
 
-                {/* 👇 🌟 优化：手机端去掉了 mix-blend-overlay，但保留了 blur 模糊光晕，确保视觉不打折 */}
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-white/40 dark:bg-indigo-900/20 blur-[100px] rounded-full z-[-7] md:mix-blend-overlay"></div>
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-400/30 dark:bg-purple-900/30 blur-[100px] rounded-full z-[-7] md:mix-blend-overlay"></div>
-
-                {/* 隐藏手机端高负载粒子特效 */}
-                <div className="hidden md:block absolute inset-0 w-full h-full">
-                  <BackgroundEffects />
+                  <FloatingPlayer />
+                  <GlobalToolbox />
+                  <ClickEffect />
                 </div>
-              </div>
 
-              {/* 隐藏手机端弹幕 */}
-              <div className="hidden md:block">
-                <DanmakuBackground />
-              </div>
-
-              <div className="relative z-10 flex-1 flex flex-col">
-                {children}
-              </div>
-
-              <div className="hidden md:block">
-                <FloatingPlayer />
-              </div>
-
-              <div className="hidden md:block">
-                <GlobalToolbox />
-              </div>
-
-              <div className="md:hidden block">
-                <MobileBackButton />
-              </div>
-
-              {/* 隐藏手机端点击粒子 */}
-              <div className="hidden md:block">
-                <ClickEffect />
-              </div>
-            </div>
-
-            <style suppressHydrationWarning dangerouslySetInnerHTML={{ __html: `
-              @keyframes gradientMove { 
-                0% { background-position: 0% 50%; } 
-                50% { background-position: 100% 50%; } 
-                100% { background-position: 0% 50%; } 
-              }
-            `}} />
-          </MusicProvider>
-
-          <div className="hidden md:block">
-            <CyberCat />
-          </div>
-
+                <style suppressHydrationWarning dangerouslySetInnerHTML={{ __html: `
+                  @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+                  body.winter-mode .bg-effects-wrapper { opacity: 0 !important; visibility: hidden; }
+                  .winter-mode .snow-cap { position: relative !important; overflow: visible !important; }
+                  .dark.winter-mode .snow-cap {
+                    background-color: rgba(23, 37, 84, 0.4) !important;
+                    border-color: rgba(59, 130, 246, 0.3) !important;
+                    backdrop-filter: blur(12px) brightness(80%) !important;
+                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+                  }
+                  body.winter-mode .snow-cap {
+                    background-color: rgba(239, 246, 255, 0.45) !important;
+                    border-color: rgba(191, 219, 254, 0.6) !important;
+                    backdrop-filter: blur(12px) saturate(120%) !important;
+                    box-shadow: 0 8px 32px rgba(191, 219, 254, 0.25) !important;
+                    transition: all 0.7s ease !important;
+                  }
+                `}} />
+              </MusicProvider>
+            </ToastProvider>
+          </OperationProvider>
         </ThemeProvider>
+        <CyberCat />
       </body>
     </html>
   );
