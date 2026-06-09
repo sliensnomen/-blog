@@ -11,7 +11,6 @@ import ClickEffect from "../components/ClickEffect";
 import BackgroundSlider from "../components/BackgroundSlider";
 import GlobalToolbox from "../components/GlobalToolbox";
 import SplashScreen from "../components/SplashScreen";
-import { OperationProvider } from "../context/OperationContext";
 import { ToastProvider } from '../components/ToastProvider';
 import CyberCat from '../components/CyberCat';
 import DanmakuBackground from '../components/DanmakuBackground';
@@ -60,8 +59,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 
       <body className="w-screen overflow-x-hidden min-h-full flex flex-col relative transition-colors duration-1000 bg-slate-50 dark:bg-slate-950 font-serif">
         <ThemeProvider>
-          <OperationProvider>
-            <ToastProvider>
+          <ToastProvider>
               <SplashScreen />
               <MusicProvider>
                 <div id="app-mount-root" className="flex-1 flex flex-col transition-opacity duration-1000">
@@ -116,7 +114,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 `}} />
               </MusicProvider>
             </ToastProvider>
-          </OperationProvider>
         </ThemeProvider>
         <CyberCat />
       </body>
