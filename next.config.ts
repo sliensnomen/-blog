@@ -1,19 +1,19 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // 🚨 核心修改 1：关掉纯静态导出，让 Vercel 帮你把 API 跑起来！
-  // output: 'export',
+  // 【核心开关】：告诉 Next.js 放弃 Node.js，打包成纯静态的 HTML/CSS/JS
+  output: 'standalone',
 
-  // 🚨 核心修改 2：Vercel 不需要强制加斜杠，关掉它能避免很多 API 路径匹配错误
-  // trailingSlash: true,
-
-  // 下面这些可以保留
+  // 【必须项】：因为没有 Node.js 服务器了，Next.js 自带的图片压缩服务会失效，必须关闭它
   images: {
     unoptimized: true,
   },
+  // 👇 终极大招 1：屏蔽所有 TypeScript 类型报错！
   typescript: {
-    ignoreBuildErrors: true, // 忽略 TS 错误，方便快速部署
+    ignoreBuildErrors: true,
   },
+
+  // ESLint 配置已移至 .eslintrc 或单独禁用
 };
 
 export default nextConfig;

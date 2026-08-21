@@ -296,8 +296,6 @@ export default async function ChatterDetail({ params }: { params: Promise<{ slug
               <ClientSocials />
             </div>
 
-            <SidebarLyric />
-
             <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-3xl p-6 border border-white/40 dark:border-white/10 shadow-xl">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-lg font-black text-slate-800 dark:text-white tracking-wider">{yearStr}年{monthNum}月</h3>
@@ -318,6 +316,8 @@ export default async function ChatterDetail({ params }: { params: Promise<{ slug
                 ))}
               </div>
             </div>
+
+            <SidebarLyric />
 
             <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-3xl p-6 border border-white/40 dark:border-white/10 shadow-xl">
               <h3 className="font-black text-slate-900 dark:text-white mb-4 border-l-4 border-indigo-500 pl-2 text-xs tracking-widest uppercase">Recent Records</h3>

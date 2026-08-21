@@ -1,0 +1,7 @@
+{
+  "blogPath": "/home/alexchen/workspace/xhblogs/XHBlogs",
+  "staticRepoUrl": "git@github.com:sliensnomen/-.git",
+  "staticBranch": "gh-pages",
+  "sourceRepoUrl": "git@github.com:sliensnomen/-blog.git",
+  "sourceBranch": "main"
+}

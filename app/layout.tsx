@@ -4,14 +4,16 @@ import { Geist, Geist_Mono, Noto_Serif_SC } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "../components/ThemeProvider";
 import BackgroundEffects from "../components/BackgroundEffects";
-import { MusicProvider } from "../components/MusicProvider";
-import FloatingPlayer from "../components/FloatingPlayer";
+
 import { siteConfig } from "../siteConfig";
 import ClickEffect from "../components/ClickEffect";
 import BackgroundSlider from "../components/BackgroundSlider";
 import GlobalToolbox from "../components/GlobalToolbox";
 import SplashScreen from "../components/SplashScreen";
+import { OperationProvider } from "../context/OperationContext";
 import { ToastProvider } from '../components/ToastProvider';
+import { MusicProvider } from "../components/MusicProvider";
+import FloatingPlayer from "../components/FloatingPlayer";
 import CyberCat from '../components/CyberCat';
 import DanmakuBackground from '../components/DanmakuBackground';
 import GlobalSnow from '../components/GlobalSnow';
@@ -59,9 +61,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 
       <body className="w-screen overflow-x-hidden min-h-full flex flex-col relative transition-colors duration-1000 bg-slate-50 dark:bg-slate-950 font-serif">
         <ThemeProvider>
-          <ToastProvider>
-              <SplashScreen />
+          <OperationProvider>
+            <ToastProvider>
               <MusicProvider>
+              <SplashScreen />
                 <div id="app-mount-root" className="flex-1 flex flex-col transition-opacity duration-1000">
                   <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
                     {!siteConfig.useGradient && <BackgroundSlider />}
@@ -94,6 +97,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                   <ClickEffect />
                 </div>
 
+                </MusicProvider>
                 <style suppressHydrationWarning dangerouslySetInnerHTML={{ __html: `
                   @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
                   body.winter-mode .bg-effects-wrapper { opacity: 0 !important; visibility: hidden; }
@@ -112,8 +116,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                     transition: all 0.7s ease !important;
                   }
                 `}} />
-              </MusicProvider>
             </ToastProvider>
+          </OperationProvider>
         </ThemeProvider>
         <CyberCat />
       </body>
