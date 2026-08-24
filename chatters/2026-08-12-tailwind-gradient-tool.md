@@ -10,8 +10,8 @@ cover: https://upload-bbs.miyoushe.com/upload/2026/01/09/280234141/5b546b0aa7a81
 description: ''
 ---
 
-叫 `tailwindcss-gradient-generator`，可以可视化调渐变，然后一键复制 class。
+叫 `tailwindcss-gradient-generator`，可视化调渐变，一键复制 class。
 
-终于不用自己手动写 `from-pink-500 via-purple-500 to-indigo-500` 试十几遍了。
+终于不用手动写 `from-pink-500 via-purple-500 to-indigo-500` 试十几遍了。
 
-已收藏，准备给博客换一套新的背景渐变。
+已收藏，准备给博客换套新渐变。

@@ -67,6 +67,6 @@ export const siteConfig = {
     maxOutputTokens: 150,
     temperature: 0.85,
   },
-  friendLinkApplyFormat: "名称：骰子，代码，与龙语 の藏书室\n简介：有人能送点钱吗？\nhttps://draconiccodex.com",
+  friendLinkApplyFormat: "名称：骰子，代码，与龙语 の藏书室\n简介：今天我也要学习吗\n",
   enableLevelSystem: true,
 };
